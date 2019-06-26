@@ -49,34 +49,6 @@ void nbiot_init_environment( int argc, char *argv[] )
      USART3_Init(); 
      Peripheral_Init();
      printf("test\r\n");
-#ifdef HARDWARE_TEST
-     Usart2_Init(115200);	
-	   Usart4_Init(115200);
-    UsartPrintf(USART1, "I am USART1!\r\n");	
-	  UsartPrintf(USART2, "I am USART2!\r\n");
-	  UsartPrintf(USART3, "I am USART3!\r\n");
-   	UsartPrintf(UART4,  "I am UART4!\r\n");
-     Beep_test(500);	
-		 Key_test();	
-	   Led_test(500);
-	   printf(".........SHT20 test begin.........\r\n");
-	   SHT20_test();
-		 Led1_Set(LED_OFF);
-	   printf(".........SHT20 test end.........\r\n");
-	   printf(".........BH1750 test begin.........\r\n");
-	   BH1750_test();
-		 Led2_Set(LED_OFF);
-		 printf(".........BH1750 test end.........\r\n");
-		 printf(".........ADXL345 test begin.........\r\n");
-	   ADXL345_GetValue();
-		 Led3_Set(LED_OFF);
-		 printf(".........ADXL345 test end.........\r\n");
-		 printf(".........BMP180 test begin.........\r\n");
-	   BMP180_test();
-		 Led4_Set(LED_OFF);
-		 printf(".........BMP180 test end.........\r\n");
-     mDelay(1000);
-#endif			
      mDelay(5000);			
 	   netdev_init();
      _nbiot_init_state = true;

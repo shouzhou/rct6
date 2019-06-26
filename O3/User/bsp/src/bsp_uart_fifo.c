@@ -303,14 +303,14 @@ void bsp_SetUart2Baud(uint32_t _baud)
 */
 void RS485_InitTXE(void)
 {
-	GPIO_InitTypeDef GPIO_InitStructure;
+//	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_RS485_TXEN, ENABLE);	/* 打开GPIO时钟 */
+//	RCC_APB2PeriphClockCmd(RCC_RS485_TXEN, ENABLE);	/* 打开GPIO时钟 */
 
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
-	GPIO_InitStructure.GPIO_Pin = PIN_RS485_TXEN;
-	GPIO_Init(PORT_RS485_TXEN, &GPIO_InitStructure);
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
+//	GPIO_InitStructure.GPIO_Pin = PIN_RS485_TXEN;
+//	GPIO_Init(PORT_RS485_TXEN, &GPIO_InitStructure);
 }
 
 /*

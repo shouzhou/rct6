@@ -14,13 +14,7 @@
 #ifndef _BSP_H_
 #define _BSP_H_
 
-#define STM32_V4
-//#define STM32_X2
 
-/* 检查是否定义了开发板型号 */
-#if !defined (STM32_V4) && !defined (STM32_X2)
-	#error "Please define the board model : STM32_X2 or STM32_V4"
-#endif
 
 /* 定义 BSP 版本号 */
 #define __STM32F1_BSP_VERSION		"1.1"

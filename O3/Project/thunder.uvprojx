@@ -336,7 +336,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD LITTLE_ENDIAN</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD</Define>
               <Undefine></Undefine>
               <IncludePath>..\User\bsp\inc;..\User\bsp;..\User\app\inc;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\Include;..\Libraries\CMSIS\Device\ST\STM32F10x\Include;..\Libraries;..\User\Network;..\User\Protocol\include;..\User\Protocol\coap_lwm2m;..\User\Protocol\platforms</IncludePath>
             </VariousControls>
@@ -392,6 +392,11 @@
         <Group>
           <GroupName>bsp</GroupName>
           <Files>
+            <File>
+              <FileName>bsp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\User\bsp\bsp.h</FilePath>
+            </File>
             <File>
               <FileName>bsp.c</FileName>
               <FileType>1</FileType>
