@@ -49,7 +49,7 @@ void bsp_Init(void)
 	//RS485_RX_EN();      //调试添加
 	bsp_InitADC();		/* 初始化ADC */
     EXTI_Key_Config();
-    //bsp_DelayMS(100);
+    bsp_DelayMS(100);
 }
 
 /*
