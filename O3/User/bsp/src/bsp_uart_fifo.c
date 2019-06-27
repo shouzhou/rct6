@@ -102,7 +102,7 @@ UART_T *ComToUart(COM_PORT_E _ucPort)
 		#if UART2_FIFO_EN == 1
 			return &g_tUart2;
 		#else
-			return 0;
+			return;
 		#endif
 	}
 	else if (_ucPort == COM3)
@@ -303,14 +303,14 @@ void bsp_SetUart2Baud(uint32_t _baud)
 */
 void RS485_InitTXE(void)
 {
-//	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitTypeDef GPIO_InitStructure;
 
-//	RCC_APB2PeriphClockCmd(RCC_RS485_TXEN, ENABLE);	/* 打开GPIO时钟 */
+	RCC_APB2PeriphClockCmd(RCC_RS485_TXEN, ENABLE);	/* 打开GPIO时钟 */
 
-//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
-//	GPIO_InitStructure.GPIO_Pin = PIN_RS485_TXEN;
-//	GPIO_Init(PORT_RS485_TXEN, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
+	GPIO_InitStructure.GPIO_Pin = PIN_RS485_TXEN;
+	GPIO_Init(PORT_RS485_TXEN, &GPIO_InitStructure);
 }
 
 /*
@@ -409,7 +409,7 @@ void RS485_ReciveNew(uint8_t _byte)
 
 void UART2_ReciveNew(uint8_t data)
 {
-    // HC_ReciveNew(data) ;          
+     HC_ReciveNew(data) ;          
 }
 /*
 *********************************************************************************************************
@@ -452,7 +452,7 @@ static void UartVarInit(void)
 	g_tUart2.usTxCount = 0;						/* 待发送的数据个数 */
 	g_tUart2.SendBefor = 0;						/* 发送数据前的回调函数 */
 	g_tUart2.SendOver = 0;						/* 发送完毕后的回调函数 */
-	g_tUart2.ReciveNew = UART2_ReciveNew;		    /* 接收到新数据后的回调函数 */
+	g_tUart2.ReciveNew = HC_ReciveNew;		    /* 接收到新数据后的回调函数 */
    // g_tUart2.ReciveNew = 0;		            	/* 接收到新数据后的回调函数 */
 #endif
 

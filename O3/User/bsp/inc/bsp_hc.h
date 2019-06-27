@@ -2,10 +2,11 @@
 #ifndef __BSP_HCHC2_H
 #define __BSP_HCHC2_H
 
-
-#define HC_RX_BUF_SIZE		128
+#include "stdint.h"
+#define HC_RX_BUF_SIZE		30
 #define HC_TX_BUF_SIZE		30
 
+extern uint16_t g_lenth,g_width,g_height;
 extern uint8_t g_hcRevOK;
 typedef struct
 {
@@ -20,6 +21,7 @@ void HC_AskForData(void);
 void HC_Analyze(void);
 
 void HC_ReciveNew(uint8_t _data);
+void bsp_StartHardTimer(uint8_t _CC, uint32_t _uiTimeOut, void * _pCallBack);
 #endif
 
 

@@ -5,11 +5,10 @@
 #define __BSP_EEPROM_24XX_H
 
 /* Includes ------------------------------------------------------------------*/
+#include "stdint.h"
 #include "bsp_i2c_gpio.h"
 
-/* Exported types ------------------------------------------------------------*/
 
-/* Exported constants --------------------------------------------------------*/
 //#define   WP    P12       
 
  #define AT24C02 
@@ -21,9 +20,9 @@
 
 #ifdef AT24C02
 	#define EE_MODEL_NAME		"AT24C02"
-	#define EE_DEV_ADDR			0xA0			/* 设备地址 */
+	#define EE_DEV_ADDR			0xA0			    /* 设备地址 */
 	#define EE_PAGE_SIZE		8					/* 页面大小(字节) */
-	#define EE_SIZE				256				/* 总容量(字节) */
+	#define EE_SIZE				256				    /* 总容量(字节) */
 	#define EE_ADDR_BYTES		1					/* 地址字节个数 */
 	#define EE_ADDR_A8			0					/* 地址字节的高8bit不在首字节 */
 #endif
@@ -86,6 +85,7 @@
 
 /* Exported functions ------------------------------------------------------- */
 /* EEPROM检测    主函数调用 */
+void  ee_ReadSaveData(void);
 uint8_t ee_CheckOk(void);
 /* EEPROM连续读  主函数调用 */
 uint8_t ee_ReadBytes(uint8_t * /*_pReadBuf*/, uint16_t /*_usAddress*/, uint16_t /*_usSize*/);
@@ -93,7 +93,7 @@ uint8_t ee_ReadBytes(uint8_t * /*_pReadBuf*/, uint16_t /*_usAddress*/, uint16_t 
 uint8_t ee_WriteBytes(uint8_t /*_rease*/, uint8_t * /*_pWriteBuf*/, uint16_t /*_usAddress*/, uint16_t /*_usSize*/);
 
 /* Internal variables --------------------------------------------------------*/
-
+extern uint8_t eeResult[EE_SIZE]; 
 #endif /* __BSP_EEPROM_24XX_H */
 
 

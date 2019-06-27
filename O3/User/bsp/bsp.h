@@ -30,6 +30,9 @@
 #define BSP_Printf		printf
 //#define BSP_Printf(...)
 
+
+#define  USEDEBUG
+
 #include "stm32f10x.h"
 #include <stdio.h>
 #include <string.h>
@@ -76,6 +79,7 @@
 #include "bsp_iocontrol.h"
 #include "bsp_mkey.h"
 #include "delay.h"
+#include "menu.h"
 
 
 #include "at_cmd.h"

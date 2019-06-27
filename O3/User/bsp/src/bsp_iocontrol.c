@@ -1,7 +1,7 @@
 #include "bsp.h"
 
 /* 按键口对应的RCC时钟 */
-#define RCC_ALL_IO 	(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB)
+#define RCC_ALL_IO 	(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOC)
 
 #define GPIO_PORT_IO1   GPIOA
 #define GPIO_PIN_IO1	GPIO_Pin_15
@@ -14,6 +14,9 @@
 
 #define GPIO_PORT_IO4   GPIOB
 #define GPIO_PIN_IO4	GPIO_Pin_3
+
+#define GPIO_PORT_IO5   GPIOC
+#define GPIO_PIN_IO5	GPIO_Pin_13
 
 /*
 *********************************************************************************************************
@@ -39,6 +42,7 @@ void bsp_InitIO(void)
 //	bsp_IOOff(2);
 //	bsp_IOOff(3);
 //	bsp_IOOn(4);
+    bsp_IOOff(5); //防止M5310 复位
 
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	/* 推挽输出模式 */
@@ -55,10 +59,14 @@ void bsp_InitIO(void)
 	GPIO_InitStructure.GPIO_Pin = GPIO_PIN_IO4;
 	GPIO_Init(GPIO_PORT_IO4, &GPIO_InitStructure);
     
+    GPIO_InitStructure.GPIO_Pin = GPIO_PIN_IO5;
+	GPIO_Init(GPIO_PORT_IO5, &GPIO_InitStructure);
+    
    	bsp_IOOn(1);
 	bsp_IOOn(2);
 	bsp_IOOn(3);
 	bsp_IOOn(4);
+    bsp_IOOff(5); //防止M5310 复位
 }
 
 /*
@@ -71,23 +79,27 @@ void bsp_InitIO(void)
 */
 void bsp_IOOff(uint8_t _no)
 {
-	_no--;
+	//_no--;
 
-	if (_no == 0)
+	if (_no == 1)
 	{
 		GPIO_PORT_IO1->BRR = GPIO_PIN_IO1;
 	}
-	else if (_no == 1)
+	else if (_no == 2)
 	{
 		GPIO_PORT_IO2->BRR = GPIO_PIN_IO2;
 	}
-	else if (_no == 2)
+	else if (_no == 3)
 	{
 		GPIO_PORT_IO3->BRR = GPIO_PIN_IO3;
 	}
-	else if (_no == 3)
+	else if (_no == 4)
 	{
 		GPIO_PORT_IO4->BRR = GPIO_PIN_IO4;
+	}
+    else if (_no == 5)
+	{
+		GPIO_PORT_IO5->BRR = GPIO_PIN_IO5;
 	}
 }
 
@@ -101,23 +113,27 @@ void bsp_IOOff(uint8_t _no)
 */
 void bsp_IOOn(uint8_t _no)
 {
-	_no--;
+	//_no--;
 
-	if (_no == 0)
+	if (_no == 1)
 	{
 		GPIO_PORT_IO1->BSRR = GPIO_PIN_IO1;
 	}
-	else if (_no == 1)
+	else if (_no == 2)
 	{
 		GPIO_PORT_IO2->BSRR = GPIO_PIN_IO2;
 	}
-	else if (_no == 2)
+	else if (_no == 3)
 	{
 		GPIO_PORT_IO3->BSRR = GPIO_PIN_IO3;
 	}
-	else if (_no == 3)
+	else if (_no == 4)
 	{
 		GPIO_PORT_IO4->BSRR = GPIO_PIN_IO4;
+	}
+    else if (_no == 5)
+	{
+		GPIO_PORT_IO5->BSRR = GPIO_PIN_IO5;
 	}
 }
 
@@ -146,6 +162,10 @@ void bsp_IOToggle(uint8_t _no)
 	else if (_no == 4)
 	{
 		GPIO_PORT_IO4->ODR ^= GPIO_PIN_IO4;
+	}
+    else if (_no == 5)
+	{
+		GPIO_PORT_IO5->ODR ^= GPIO_PIN_IO5;
 	}
 }
 
@@ -191,8 +211,16 @@ uint8_t bsp_IsIOOn(uint8_t _no)
 		}
 		return 0;
 	}
+    
+    else if (_no == 5)
+	{
+		if ((GPIO_PORT_IO5->ODR & GPIO_PIN_IO5) == 0)
+		{
+			return 1;
+		}
+		return 0;
+	}
 
 	return 0;
 }
 
- 

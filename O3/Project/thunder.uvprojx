@@ -387,6 +387,11 @@
               <FileType>1</FileType>
               <FilePath>..\User\app\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\menu.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -436,6 +441,36 @@
               <FileName>bsp_uart_fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\bsp\src\bsp_uart_fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_diwen.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_diwen.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_eeprom_24xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_eeprom_24xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_hc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_hc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_iocontrol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_iocontrol.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_mkey.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_mkey.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_tim_capture.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_tim_capture.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -601,6 +636,13 @@
         </Group>
         <Group>
           <GroupName>doc</GroupName>
+          <Files>
+            <File>
+              <FileName>ReadMe.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Doc\ReadMe.txt</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

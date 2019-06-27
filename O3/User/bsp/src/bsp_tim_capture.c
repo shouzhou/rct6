@@ -1,20 +1,30 @@
 #include "bsp.h"
-uint16_t count=0;
+
 // 如果需要TIM3重映射 ，打开该宏定义即可
 #define  TIM3REMAP    
-void  BASIC_TIM_IRQHandler (void)
+
+uint16_t count=0;
+void  BASIC_TIM_IRQHandler (void)  //about  10ms  period
 {
 	if ( TIM_GetITStatus( BASIC_TIM, TIM_IT_Update) != RESET ) 
 	{	
         count++;
-        // 这里用来产生 不同的频率 用于做测频信号
-     //   if(count%3==0)
-      //  bsp_LedToggle(1);
-	//	bsp_LedToggle(2);
-      //  if(count%10==0)
-    //    bsp_LedToggle(3);
-      //  if(count%50==0)
-      //  bsp_LedToggle(4);
+        if(count==2) 
+        {
+            
+        count =0;
+        keyvalue = bsp_MkeyScan();  
+
+        if(keyvalue)
+        {
+       
+            bsp_KeyFunction(keyvalue);
+            switch_menu(keyvalue);
+
+        }
+        }
+    
+ 
 		TIM_ClearITPendingBit(BASIC_TIM , TIM_FLAG_Update);  		 
 	}		 	
 }
@@ -137,7 +147,7 @@ void TIM3_CAP_Init(u16 arr,u16 psc)
 	
 	//中断分组初始化
 	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;  //TIM3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级2级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 4;  //先占优先级2级
 	//NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级0级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 	NVIC_Init(&NVIC_InitStructure);  //根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器 
@@ -312,17 +322,21 @@ void TIM3_IRQHandler(void)
 void tim_print_result(void)
 {
     uint16_t temp=0;
-  //  bsp_Diwen_Updatedata(0x0007,temp);
-   // printf("interestin");
+    #ifdef USEDEBUG
+    printf("in tim print test\r\n");
+    #endif
+ 
     if(CAPTURE_STA_TIM3CH[0]&0X80)//成功捕获到了一次上升沿
 		{
 			temp=CAPTURE_STA_TIM3CH[0]&0X3F;
 			temp*=65536;//溢出时间总和
 			temp+=CAPTURE_VAL_TIM3CH[0];//得到总的高电平时间
-			//bsp_Diwen_Updatedata(0x0007,temp);  
+			bsp_Diwen_Updatedata(0x000A,10000/temp);  
+            #ifdef USEDEBUG
             printf("通道1 :HIGH:%d us  FREQUENCE :%4.2fKHz\r\n",temp,1000.0/(float)temp);	//打印总的高点平时间
+            #endif
 			CAPTURE_STA_TIM3CH[0]=0;//开启下一次捕获
-          //  TIM_Cmd(TIM3,DISABLE);
+          
 		}
         
      if(CAPTURE_STA_TIM3CH[1]&0X80)//成功捕获到了一次上升沿
@@ -330,10 +344,12 @@ void tim_print_result(void)
 			temp=CAPTURE_STA_TIM3CH[1]&0X3F;
 			temp*=65536;//溢出时间总和
 			temp+=CAPTURE_VAL_TIM3CH[1];//得到总的高电平时间
-			//bsp_Diwen_Updatedata(0x0007,temp);  
+			bsp_Diwen_Updatedata(0x000B,10000/temp);  
+            #ifdef USEDEBUG
             printf("通道2 :HIGH:%d us  FREQUENCE :%4.2fKHz\r\n",temp,1000.0/(float)temp);	//打印总的高点平时间
+            #endif
 			CAPTURE_STA_TIM3CH[1]=0;//开启下一次捕获
-          //  TIM_Cmd(TIM3,DISABLE);
+          
 		} 
         
       if(CAPTURE_STA_TIM3CH[2]&0X80)//成功捕获到了一次上升沿
@@ -341,10 +357,12 @@ void tim_print_result(void)
 			temp=CAPTURE_STA_TIM3CH[2]&0X3F;
 			temp*=65536;//溢出时间总和
 			temp+=CAPTURE_VAL_TIM3CH[2];//得到总的高电平时间
-			//bsp_Diwen_Updatedata(0x0007,temp);  
+			bsp_Diwen_Updatedata(0x000C,10000/temp); 
+            #ifdef USEDEBUG            
             printf("通道3 :HIGH:%d us  FREQUENCE :%4.2fKHz\r\n",temp,1000.0/(float)temp);	//打印总的高点平时间
+            #endif
 			CAPTURE_STA_TIM3CH[2]=0;//开启下一次捕获
-          //  TIM_Cmd(TIM3,DISABLE);
+          
 		} 
         
       if(CAPTURE_STA_TIM3CH[3]&0X80)//成功捕获到了一次上升沿
@@ -352,10 +370,12 @@ void tim_print_result(void)
 			temp=CAPTURE_STA_TIM3CH[3]&0X3F;
 			temp*=65536;//溢出时间总和
 			temp+=CAPTURE_VAL_TIM3CH[3];//得到总的高电平时间
-			//bsp_Diwen_Updatedata(0x0007,temp);  
+			bsp_Diwen_Updatedata(0x000D,10000/temp);  
+            #ifdef USEDEBUG
             printf("通道4 :HIGH:%d us  FREQUENCE :%4.2fKHz\r\n",temp,1000.0/(float)temp);	//打印总的高点平时间
+            #endif
 			CAPTURE_STA_TIM3CH[3]=0;//开启下一次捕获
-          //  TIM_Cmd(TIM3,DISABLE);
+          
 		} 
         
     

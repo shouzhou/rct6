@@ -10,22 +10,8 @@
 //PA7 --key2-----|                  |
 //PA6 --key1-----|                  |
 //               |------------------|
-#define  KEYPAD_1  16
-#define  KEYPAD_2  12
-#define  KEYPAD_3  8
-#define  KEYPAD_4  15
-#define  KEYPAD_5  11
-#define  KEYPAD_6  7
-#define  KEYPAD_7  14
-#define  KEYPAD_8  10
-#define  KEYPAD_9  6
-#define  KEYPAD_0  9
-#define  KEYPAD_A  4
-#define  KEYPAD_B  3
-#define  KEYPAD_C  2
-#define  KEYPAD_D  1
-#define  KEYPAD_STAR  13
-#define  KEYPAD_HASH  5
+uint8_t keyvalue=0;
+
 typedef struct 
 {
 	GPIO_TypeDef* GPIOX;
@@ -42,7 +28,8 @@ KGPT KPIN={ //只需要在下面填写横竖行的IO口和管脚   IO口和管脚都可以随意定义 无需
 #define row 0
 #define col 1					
 #define RCC_APB2_GPIOX  RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOC//IO时钟					
-#define MAX_Time   36000000 // 松手检测最大延时   
+//#define MAX_Time   36000000 // 松手检测最大延时   
+//按键初始化函数 
 //按键初始化函数 
 void bsp_MkeyInit(void)
 {
@@ -59,42 +46,120 @@ void bsp_MkeyInit(void)
 	}
  for(i=0;i<4;i++)
 	{
-		 GPIO_InitStructure.GPIO_Pin  = KPIN[col][i].GPIO_Pin;//PC5
-		 GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //设置成上拉输入
-		 GPIO_Init(KPIN[col][i].GPIOX, &GPIO_InitStructure);//初始化col
+     GPIO_InitStructure.GPIO_Pin  = KPIN[col][i].GPIO_Pin;//PC5
+     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //设置成上拉输入
+     GPIO_Init(KPIN[col][i].GPIOX, &GPIO_InitStructure);//初始化col
 	}
+    printf("mkey init ok\r\n");
 } 
 
 uint8_t ReScan(GPIO_TypeDef* GPIOX,uint16_t colPin,uint8_t colIndex)
 {
  uint8_t i;
 // delay_ms(10);//消抖延时
- for(i = 0;i<4;i++){
-  GPIO_SetBits(KPIN[row][i].GPIOX,KPIN[row][i].GPIO_Pin);//每个行置1
-  if((GPIO_ReadInputDataBit(GPIOX, colPin) == 1)) //如果列也变了 行的值就知道了 为 i
+ for(i = 0;i<4;i++)
+    {
+    GPIO_SetBits(KPIN[row][i].GPIOX,KPIN[row][i].GPIO_Pin);//每个行置1
+    if((GPIO_ReadInputDataBit(GPIOX, colPin) == 1)) //如果列也变了 行的值就知道了 为 i
 		{
 			GPIO_ResetBits(KPIN[row][i].GPIOX,KPIN[row][i].GPIO_Pin); //行恢复 置0 
             return colIndex+i*4+1;//返回的数据 为1-16 对应4x4键盘的16个键
 		}
 	GPIO_ResetBits(KPIN[row][i].GPIOX,KPIN[row][i].GPIO_Pin);     //行恢复 置0
- }
+    }
  return 0;
 }
 uint8_t bsp_MkeyScan(void)
 {	 
- uint8_t i,keyvalue;
-	//u32 j=0;
+ uint8_t i,key;
+
+    #ifdef USEDEBUG
+  //  printf("DEBUG ---in MkeyScan \r\n");
+    #endif
 	for(i = 0;i<4;i++)
 	{
 	 if(GPIO_ReadInputDataBit(KPIN[col][i].GPIOX,KPIN[col][i].GPIO_Pin) == 0)//检测列 列值为 i
 	 {
-			keyvalue = ReScan(KPIN[col][i].GPIOX,KPIN[col][i].GPIO_Pin,i);//检测行 取键值
+         
+			key = ReScan(KPIN[col][i].GPIOX,KPIN[col][i].GPIO_Pin,i);//检测行 取键值
 		  while(GPIO_ReadInputDataBit(KPIN[col][i].GPIOX,KPIN[col][i].GPIO_Pin) == 0);
 		//	while((GPIO_ReadInputDataBit(KPIN[col][i].GPIOX,KPIN[col][i].GPIO_Pin) == 0)&&(j<MAX_Time))j++;//松手检测
-			return keyvalue;//返回键值
-		}
+			return key;//返回键值
+     }
 	}
 return 0;
+}
+
+void bsp_KeyProcess(uint8_t key)
+{
+     uint8_t temp = key;
+            switch(temp)
+                {
+                    case  KEYPAD_1 :
+                        bsp_SendKey(1);
+                        printf("key1 press\r\n");
+                        break;
+                    case  KEYPAD_2 :
+                        bsp_SendKey(2);
+                        printf("key2 press\r\n");
+                        break;
+                    case  KEYPAD_3 :
+                        bsp_SendKey(3);
+                        printf("key3 press\r\n");
+                        break;
+                    case  KEYPAD_4 :
+                        bsp_SendKey(4);
+                        printf("key4 press\r\n");
+                        break;
+                    case  KEYPAD_5 :
+                        bsp_SendKey(5);
+                        printf("key5 press\r\n");
+                        break;
+                    case  KEYPAD_6 :
+                        bsp_SendKey(6);
+                        printf("key6 press\r\n");
+                        break;
+                    case  KEYPAD_7 :
+                        bsp_SendKey(7);
+                        printf("key7 press\r\n");
+                        break;
+                    case  KEYPAD_8 :
+                        bsp_SendKey(8);
+                        printf("key8 press\r\n");
+                        break;
+                    case  KEYPAD_9 :
+                        bsp_SendKey(9);
+                        printf("key9 press\r\n");
+                        break;
+                    case  KEYPAD_0 :
+                        bsp_SendKey(0x0A);
+                        printf("key0 press\r\n");
+                        break;
+                    case  KEYPAD_A :
+                        bsp_SendKey(0x0A);
+                        printf("keyA press\r\n");
+                        break;
+                    case  KEYPAD_B :
+                        bsp_SendKey(0x0A);
+                        printf("keyB press\r\n");
+                        break;
+                    case  KEYPAD_C :
+                        bsp_SendKey(0x0A);
+                        printf("keyC press\r\n");
+                        break;
+                    case  KEYPAD_D :
+                        bsp_SendKey(0x0A);
+                        printf("keyD press\r\n");
+                        break;
+                    case  KEYPAD_STAR :
+                        printf("key* press\r\n");
+                        break;
+                    case  KEYPAD_HASH :
+                        printf("key# press\r\n");
+                        break;
+                    default :
+                        break;
+                }
 }
 
 

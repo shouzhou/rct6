@@ -1,18 +1,3 @@
-//#include "stm32f10x.h"
-//#include "stm32f10x_usart.h"
-//#include "stm32f10x_exti.h"
-//#include "misc.h"
-//#include "M5310.h"
-//#include "stm32f10x.h"
-//#include "stdio.h"
-//#include "stdlib.h"
-//#include "string.h"
-//#include "utils.h"
-//#include "ringbuf.h"
-//#include "fifo.h"
-//#include "at_cmd.h"
-//#include "led.h"
-
 #include "bsp.h"
 volatile char rsp_ok=0;
 struct ringbuf ring_fifo;
@@ -71,43 +56,43 @@ void USART3_Write(uint8_t *Data, uint32_t len)
 void USART3_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-	  USART_InitTypeDef USART_InitStructure;
+    USART_InitTypeDef USART_InitStructure;
    	NVIC_InitTypeDef NVIC_InitStructure;
  #ifdef UART_DMA
-   DMA_InitTypeDef DMA_InitStructure;
-   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);  
+       DMA_InitTypeDef DMA_InitStructure;
+       RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);  
 #endif	 
-  	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
-   	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE); 
-	  USART_DeInit(USART3); 
-	
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10; //PA2
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_Init(GPIOB, &GPIO_InitStructure); 
-   
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_Init(GPIOB, &GPIO_InitStructure); 
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE); 
+        USART_DeInit(USART3); 
 
-	  USART_InitStructure.USART_BaudRate = 9600;
-	  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-	  USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    USART_InitStructure.USART_Parity = USART_Parity_No;
-	  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	
-    
-		ringbuf_init(&ring_fifo, rx_fifo, sizeof(rx_fifo));
-		ringbuf_init(&ring_fifo1, rx_fifo1, sizeof(rx_fifo1));
-    dl_buf_id=fifo_init(&dl_buf);
-    register_cmd_handler(USART3_Write,&ring_fifo1,&rsp_ok);
-		
-    USART_Init(USART3, &USART_InitStructure);
-    NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-	  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0 ;
-  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;	
-	  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	
-	  NVIC_Init(&NVIC_InitStructure);	
+        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10; 
+        GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+        GPIO_Init(GPIOB, &GPIO_InitStructure); 
+
+        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+        GPIO_Init(GPIOB, &GPIO_InitStructure); 
+
+        USART_InitStructure.USART_BaudRate = 9600;
+        USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+        USART_InitStructure.USART_StopBits = USART_StopBits_1;
+        USART_InitStructure.USART_Parity = USART_Parity_No;
+        USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+        USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	
+
+        ringbuf_init(&ring_fifo, rx_fifo, sizeof(rx_fifo));
+        ringbuf_init(&ring_fifo1, rx_fifo1, sizeof(rx_fifo1));
+        dl_buf_id=fifo_init(&dl_buf);
+        register_cmd_handler(USART3_Write,&ring_fifo1,&rsp_ok);
+
+        USART_Init(USART3, &USART_InitStructure);
+        NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0 ;
+        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;	
+        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	
+        NVIC_Init(&NVIC_InitStructure);	
   #ifdef UART_DMA 
     //DMA1通道4配置  
     DMA_DeInit(USARx_DMA[3]);  
@@ -198,40 +183,5 @@ void USART3_IRQHandler(void)
 #endif  		
 }
 
-#if 0
-void USART1_IRQHandler(void)
-{
-     unsigned int data;
-     uint8_t *msg_p=NULL;
-    if(USART1->SR & 0x0F)
-    {
-        data = USART1->DR;
-    }	
-    else if(USART1->SR & USART_FLAG_RXNE)  
-    {		
-        data = USART1->DR;
-   	    ringbuf_put(&ring_fifo,data);
-	     if(ringbuf_elements(&ring_fifo)==1)
-           USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
 
-			                    
-    }		
-		else if(USART1->SR & USART_FLAG_IDLE){
-                 data=USART1->SR;
-		             data=USART1->DR;              
-                 USART_ITConfig(USART1, USART_IT_IDLE, DISABLE);   
- 
-        if((msg_p= strstr((const char *)ring_fifo.data, "+MIPL"))!=NULL) {
-              fifo_put(dl_buf_id,ringbuf_elements(&ring_fifo),ring_fifo.data);                            
-            }
-        else{
-                rsp_ok=1;
-                ring_fifo1.get_ptr=ring_fifo.get_ptr;
-                ring_fifo1.put_ptr= ring_fifo.put_ptr;
-                memcpy(ring_fifo1.data,ring_fifo.data,ringbuf_elements(&ring_fifo));
-          } 
-              ringbuf_clear(&ring_fifo);   
-	 }	
- }
-#endif
 

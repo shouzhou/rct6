@@ -85,10 +85,10 @@ uint8_t DHT11_ReadData(DHT11_T *_pDTH)
 
 	/* 1. 主机发送起始信号, DQ拉低时间 1MS */
 	DQ_0();		/* DQ = 0 */
-	mDelay(18);
+	delay_ms_sub(18);
 	DQ_1();		/* DQ = 1 */
 
-	delay_us(30);	/* 等待15us */
+	uDelay(30);	/* 等待15us */
 
 	/* 2. 等待DQ电平变低 ( 超时100us) */
 	for (k = 0; k < 10; k++)
@@ -97,7 +97,7 @@ uint8_t DHT11_ReadData(DHT11_T *_pDTH)
 		{
 			break;
 		}
-		delay_us(10);
+		uDelay(10);
 	}
 	if (k >= 10)
 	{
@@ -111,7 +111,7 @@ uint8_t DHT11_ReadData(DHT11_T *_pDTH)
 		{
 			break;
 		}
-		delay_us(10);
+		uDelay(10);
 	}
 	if (k >= 10)
 	{
@@ -125,7 +125,7 @@ uint8_t DHT11_ReadData(DHT11_T *_pDTH)
 //		{
 //			break;
 //		}
-//		delay_us(10);
+//		uDelay(10);
 //	}
 //	if (k >= 10)
 //	{
@@ -137,7 +137,7 @@ uint8_t DHT11_ReadData(DHT11_T *_pDTH)
 	{
 		_pDTH->Buf[i] = DHT11_ReadByte();
 	}
-	delay_us(10);
+	uDelay(10);
 
 	/* 计算校验和 */
 	sum = _pDTH->Buf[0] + _pDTH->Buf[1] + _pDTH->Buf[2] + _pDTH->Buf[3];
@@ -177,7 +177,7 @@ static uint8_t DHT11_ReadByte(void)
 			{
 				break;
 			}
-			delay_us(10);
+			uDelay(10);
 		}
 		if (k >= 10)
 		{
@@ -191,9 +191,9 @@ static uint8_t DHT11_ReadByte(void)
 			{
 				break;
 			}
-			delay_us(10);
+			uDelay(10);
 		}
-        delay_us(40);
+        uDelay(40);
         
         if(!DQ_IS_LOW()) read++;
        // else  read =1 ;

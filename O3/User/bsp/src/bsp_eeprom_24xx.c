@@ -3,24 +3,31 @@
 	应用说明：访问串行EEPROM前，请先调用一次 bsp_InitI2C()函数配置好I2C相关的GPIO.
 */
 
-/* Includes ------------------------------------------------------------------*/
 #include "bsp.h"
 
-/* Private typedef -----------------------------------------------------------*/
+uint8_t eeResult[EE_SIZE];  //用于保存系统数据
 
-/* Private define ------------------------------------------------------------*/
+/*
+    EEPROM 分配地址  ：6个字节存放当前的温湿度
+    00 --0X00      
+    //  第0位 表示 长度设置ok
+    //  第1位 表示 宽度设置OK
+    //  第2位 表示 高度设置OK
+    01 --lengthH
+    02 --lengthL
+    03 --widthH
+    04 --widthL
+    05 --heightH
+    06 --heightL
+    07 --failtimeH
+    08 --failtimeL
+    
+    
+    
 
-/* Private macro -------------------------------------------------------------*/
-
-/* Private variables ---------------------------------------------------------*/
-
-/* Private function prototypes -----------------------------------------------*/
-
-/* Private functions ---------------------------------------------------------*/
-
-/* Extern variables reference-------------------------------------------------*/
-
-/* Variable definition -------------------------------------------------------*/
+*/
+ 
+ 
 
 /*
 *********************************************************************************************************
@@ -42,6 +49,46 @@ uint8_t ee_CheckOk(void)
 		i2c_Stop();
 		return 0;
 	}
+}
+
+
+/*
+
+  读取eeprom中的数据，在上电时做这个事情
+*/
+
+void ee_ReadSaveData(void)
+{
+    ee_ReadBytes(eeResult,0,20);
+    if(eeResult[0] &0x01)  //长度已经设置
+    {
+        g_lenth = ((uint16_t)eeResult[1]<<8)+eeResult[2];
+        #ifdef USEDEBUG
+
+          printf("Read lenth = %d\r\n",g_lenth/10);
+          bsp_Diwen_Updatedata(0x0000,g_lenth);
+        #endif 
+    }
+    if(eeResult[0] &0x02)  //宽度已经设置
+    {
+          g_width = ((uint16_t)eeResult[3]<<8)+eeResult[4];
+            #ifdef USEDEBUG
+
+            printf("Read width = %d\r\n",g_width/10);
+            bsp_Diwen_Updatedata(0x0001,g_width);
+            #endif 
+
+    }
+    if(eeResult[0] &0x04)  //高度已经设置
+    {
+          g_height = ((uint16_t)eeResult[5]<<8)+eeResult[6];
+        #ifdef USEDEBUG
+
+        printf("Read height = %d\r\n",g_height/10);
+        bsp_Diwen_Updatedata(0x0002,g_height);
+        #endif 
+
+    }
 }
 
 /*
@@ -148,7 +195,7 @@ cmd_fail: /* 命令执行失败后，切记发送停止信号，避免影响I2C总线上其他设备 */
 *	形    参:  _usAddress : 起始地址
 *			 _usSize : 数据长度，单位为字节
 *			 _pWriteBuf : 存放读到的数据的缓冲区指针
-			 _rease : 0 写_pWriteBuf数据， 1 写0xFF
+			 _rease : 0 写_pWriteBuf数据， 1 写0xFF(0x00)
 *	返 回 值: 0 表示失败，1表示成功
 *********************************************************************************************************
 */
@@ -230,8 +277,8 @@ uint8_t ee_WriteBytes(uint8_t _rease, uint8_t *_pWriteBuf, uint16_t _usAddress, 
 
 		/* 第6步：开始写入数据 */
 		/* _rease>0?0xFF:_pWriteBuf[i]  夏欢欢修改 */
-		i2c_SendByte(_rease>0?0xFF:_pWriteBuf[i]);
-
+		//i2c_SendByte(_rease>0?0xFF:_pWriteBuf[i]);
+        i2c_SendByte(_rease>0?0x00:_pWriteBuf[i]);
 		/* 第7步：发送ACK */
 		if (i2c_WaitAck() != 0)
 		{
