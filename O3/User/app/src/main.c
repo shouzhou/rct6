@@ -95,7 +95,7 @@ time_t cur_time=0;
 
 void res_update(time_t interval)
 {
-      if((cur_time%10 ==0)&&(cur_time<100))
+      if((cur_time%10 ==0))
       {
            tim_print_result(); 
       }
@@ -216,6 +216,7 @@ int main( int argc, char *argv[])
 
         if ( ret )
         {
+            printf( "device CONNECT error, code = %d.\r\n", ret );
             printf( "connect OneNET failed.\r\n" );
 			      nbiot_reset();
         }else{
@@ -227,15 +228,19 @@ int main( int argc, char *argv[])
              ret = nbiot_device_step( dev, 1);
              if ( ret )
              {
-               printf( "device step error, code = %d.\r\n", ret );
+               printf( "device STEP error, code = %d.\r\n", ret );
 				      // Led4_Set(LED_OFF);
                printf( "connect server failed.\r\n" );
 					 nbiot_reset();
              }else{ 
-                    res_update(60);	
+                    res_update(180);	
              }	
              HC_Analyze();
-            
+             RTC_ReadClock();	/* 读时钟，结果存放在全局变量 g_tRTC */
+		
+		   /* 打印时钟 */
+		   printf("%4d-%02d-%02d %02d:%02d:%02d\r\n", g_tRTC.Year, g_tRTC.Mon, g_tRTC.Day, 
+			  g_tRTC.Hour, g_tRTC.Min, g_tRTC.Sec);
 
 			      
     } 

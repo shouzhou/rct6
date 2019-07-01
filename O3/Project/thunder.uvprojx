@@ -472,6 +472,16 @@
               <FileType>1</FileType>
               <FilePath>..\User\bsp\src\bsp_tim_capture.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_cpu_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\bsp\src\bsp_cpu_rtc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -516,6 +526,21 @@
               <FileName>stm32f10x_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_pwr.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_bkp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c</FilePath>
             </File>
             <File>
               <FileName>at_cmd.c</FileName>
@@ -576,11 +601,6 @@
               <FileName>socket.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\Protocol\platforms\socket.c</FilePath>
-            </File>
-            <File>
-              <FileName>time.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Protocol\platforms\time.c</FilePath>
             </File>
             <File>
               <FileName>utils.c</FileName>

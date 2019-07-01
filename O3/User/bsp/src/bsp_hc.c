@@ -2,7 +2,7 @@
 static uint8_t g_hc_timeout = 0;
 
 uint16_t g_lenth=0,g_width=0,g_height=0;
-uint8_t g_hcRevOK=0;
+uint8_t g_hcRevOK=0,g_FailTime=0;
 HC_T g_tHC;
 
 

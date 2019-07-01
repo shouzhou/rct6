@@ -113,7 +113,7 @@ void bsp_InitTimer(void)
 
     	对于常规的应用，我们一般取定时周期1ms。对于低速CPU或者低功耗应用，可以设置定时周期为 10ms
     */
-//	SysTick_Config(SystemCoreClock / 1000);  --不用systick 中断
+	SysTick_Config(SystemCoreClock / 1000); 
 	
 #if defined (USE_TIM2) || defined (USE_TIM3)  || defined (USE_TIM4)	|| defined (USE_TIM5)
 	bsp_InitHardTimer();
@@ -660,6 +660,22 @@ void TIM5_IRQHandler(void)
         /* 先关闭中断，再执行回调函数。因为回调函数可能需要重启定时器 */
         s_TIM_CallBack4();
     }
+}
+
+
+void nbiot_sleep( int milliseconds)
+{
+    bsp_DelayMS(milliseconds);
+	  return;
+}
+
+
+time_t nbiot_time( void )
+{
+
+    uint32_t timecount = 0; 
+	timecount = RTC_GetCounter();  
+    return timecount;
 }
 
 /***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/

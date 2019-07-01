@@ -48,22 +48,14 @@
 	#define FALSE 0
 #endif
 
-/*
-	EXTI9_5_IRQHandler 的中断服务程序分散在几个独立的 bsp文件中。
-	需要整合到 stm32f4xx_it.c 中。
 
-	定义下面行表示EXTI9_5_IRQHandler入口函数集中放到 stm32f4xx_it.c。
-*/
-#define EXTI9_5_ISR_MOVE_OUT
-
-#define DEBUG_GPS_TO_COM1	/* 打印GPS数据到串口1 */
 
 /* 通过取消注释或者添加注释的方式控制是否包含底层驱动模块 */
 #include "bsp_uart_fifo.h"
 //#include "bsp_usart1.h"
 #include "bsp_usart3.h"
 #include "bsp_led.h"
-//#include "bsp_timer.h"
+#include "bsp_timer.h"
 #include "bsp_key.h"
 #include "bsp_msg.h"
 #include "bsp_diwen.h"
@@ -75,10 +67,11 @@
 #include "bsp_tim_capture.h"
 #include "bsp_i2c_gpio.h"
 #include "bsp_eeprom_24xx.h"
+#include "bsp_cpu_rtc.h"
 //#include "demo_i2c_eeprom.h"
 #include "bsp_iocontrol.h"
 #include "bsp_mkey.h"
-#include "delay.h"
+//#include "delay.h"
 #include "menu.h"
 
 

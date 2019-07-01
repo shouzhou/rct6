@@ -26,15 +26,15 @@ void Peripheral_Init(void)
     
     
     bsp_SendKey(1);
-    mDelay(1000);
+    bsp_DelayMS(1000);
     bsp_SendKey(6);
-    mDelay(1000);
+    bsp_DelayMS(1000);
     
     
 	TIM3_CAP_Init(0xffff,72-1);
     
     BASIC_TIM_Init();
-    bsp_InitHardTimer();
+   // bsp_InitHardTimer();
     #ifdef USEDEBUG
     printf("CurMenuIndex = %d\r\n",CurMenuIndex);
     #endif
@@ -49,12 +49,14 @@ void nbiot_init_environment( int argc, char *argv[] )
     {
         NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);  
 
-        nbiot_time_init();
+       // nbiot_time_init();
+        bsp_InitTimer();
+        bsp_InitRTC();
         bsp_InitUart();
         USART3_Init();
         bsp_InitIO(); 
         bsp_MkeyInit();        
-        mDelay(5000);
+        bsp_DelayMS(5000);
         bsp_InitI2C();
         #ifdef USEDEBUG
             if(ee_CheckOk()) printf("eeprom initial ok！\r\n");
@@ -74,7 +76,7 @@ void nbiot_init_environment( int argc, char *argv[] )
 
         Peripheral_Init(); 
 
-        mDelay(1000);			
+        bsp_DelayMS(1000);			
         netdev_init();
         _nbiot_init_state = true;
     }
@@ -96,7 +98,7 @@ void nbiot_reset(void)
 //     开发板 PWR_EN 接单片机 IO， 平时为高电平， 如需给开发板整体断电请拉低。
     // m5310A复位  --reset输出高电平1s  再拉低
     bsp_IOOn(5);
-    mDelay(1000);
+    bsp_DelayMS(1000);
     bsp_IOOff(5);
     // 写失败次数数据进入EEPROM
      //1. 先读取数据
