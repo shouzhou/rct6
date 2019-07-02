@@ -52,3 +52,14 @@
 	
 	DHT22 
 	PA12(any io pin)
+	
+	
+	io¿Ú¿ØÖÆ 5¸ö
+	
+	IO1 --PA15
+	IO2 --PB0
+	IO3 --PB1
+	IO4 --PB3
+	IO5 --PB4
+	IO6
+	

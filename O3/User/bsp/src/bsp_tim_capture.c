@@ -322,8 +322,9 @@ void TIM3_IRQHandler(void)
 void tim_print_result(void)
 {
     uint16_t temp=0;
+    //static uin8_t frestopflag =0x00 ; //没有采集到数据的标志，
     #ifdef USEDEBUG
-    printf("in tim print test\r\n");
+  //  printf("in tim print test\r\n");
     #endif
  
     if(CAPTURE_STA_TIM3CH[0]&0X80)//成功捕获到了一次上升沿
@@ -338,6 +339,10 @@ void tim_print_result(void)
 			CAPTURE_STA_TIM3CH[0]=0;//开启下一次捕获
           
 		}
+        else  //
+        {
+            bsp_Diwen_Updatedata(0x000A,0);  
+        }
         
      if(CAPTURE_STA_TIM3CH[1]&0X80)//成功捕获到了一次上升沿
 		{
@@ -351,6 +356,10 @@ void tim_print_result(void)
 			CAPTURE_STA_TIM3CH[1]=0;//开启下一次捕获
           
 		} 
+        else  //
+        {
+            bsp_Diwen_Updatedata(0x000B,0);  
+        }
         
       if(CAPTURE_STA_TIM3CH[2]&0X80)//成功捕获到了一次上升沿
 		{
@@ -363,7 +372,11 @@ void tim_print_result(void)
             #endif
 			CAPTURE_STA_TIM3CH[2]=0;//开启下一次捕获
           
-		} 
+		}
+        else  //
+        {
+            bsp_Diwen_Updatedata(0x000C,0);  
+        }
         
       if(CAPTURE_STA_TIM3CH[3]&0X80)//成功捕获到了一次上升沿
 		{
@@ -377,6 +390,10 @@ void tim_print_result(void)
 			CAPTURE_STA_TIM3CH[3]=0;//开启下一次捕获
           
 		} 
+        else  //
+        {
+            bsp_Diwen_Updatedata(0x000D,0);  
+        }
         
     
 }

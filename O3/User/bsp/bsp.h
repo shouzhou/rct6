@@ -70,6 +70,7 @@
 #include "bsp_cpu_rtc.h"
 //#include "demo_i2c_eeprom.h"
 #include "bsp_iocontrol.h"
+#include "bsp_iwdg.h"
 #include "bsp_mkey.h"
 //#include "delay.h"
 #include "menu.h"

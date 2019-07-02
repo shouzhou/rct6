@@ -95,7 +95,7 @@ time_t cur_time=0;
 
 void res_update(time_t interval)
 {
-      if((cur_time%10 ==0))
+     // if((cur_time%10 ==0))
       {
            tim_print_result(); 
       }
@@ -134,7 +134,7 @@ void res_update(time_t interval)
 }	
 int main( int argc, char *argv[])
 {
-       int life_time = 1000;
+       int life_time = 500; //ORIGINAL 1000
 	   int ret;
        nbiot_init_environment( argc, argv );  
 
@@ -221,10 +221,12 @@ int main( int argc, char *argv[])
 			      nbiot_reset();
         }else{
 	        printf( "connect OneNET success.\r\n" );
+            IWDG_Init(5,1250); //4S 看门狗
 			  }
          
     while(1)
     {
+             IWDG_Feed();
              ret = nbiot_device_step( dev, 1);
              if ( ret )
              {
@@ -239,6 +241,7 @@ int main( int argc, char *argv[])
              RTC_ReadClock();	/* 读时钟，结果存放在全局变量 g_tRTC */
 		
 		   /* 打印时钟 */
+             if(g_tRTC.Sec %10 ==0)
 		   printf("%4d-%02d-%02d %02d:%02d:%02d\r\n", g_tRTC.Year, g_tRTC.Mon, g_tRTC.Day, 
 			  g_tRTC.Hour, g_tRTC.Min, g_tRTC.Sec);
 
