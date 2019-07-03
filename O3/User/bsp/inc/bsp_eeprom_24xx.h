@@ -94,6 +94,7 @@ uint8_t ee_WriteBytes(uint8_t /*_rease*/, uint8_t * /*_pWriteBuf*/, uint16_t /*_
 
 /* Internal variables --------------------------------------------------------*/
 extern uint8_t eeResult[EE_SIZE]; 
+extern uint8_t g_WithoutOnenet;
 #endif /* __BSP_EEPROM_24XX_H */
 
 

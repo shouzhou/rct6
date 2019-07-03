@@ -4,7 +4,7 @@
 */
 
 #include "bsp.h"
-
+uint8_t g_WithoutOnenet=0; //不使用onenet 标志  =1 表示 不使用ONENET
 uint8_t eeResult[EE_SIZE];  //用于保存系统数据
 
 /*
@@ -19,8 +19,8 @@ uint8_t eeResult[EE_SIZE];  //用于保存系统数据
     04 --widthL
     05 --heightH
     06 --heightL
-    07 --failtimeH
-    08 --failtimeL
+    07 --failtime
+    
     
     
     
@@ -81,13 +81,22 @@ void ee_ReadSaveData(void)
     }
     if(eeResult[0] &0x04)  //高度已经设置
     {
-          g_height = ((uint16_t)eeResult[5]<<8)+eeResult[6];
+        g_height = ((uint16_t)eeResult[5]<<8)+eeResult[6];
         #ifdef USEDEBUG
 
         printf("Read height = %d\r\n",g_height/10);
         bsp_Diwen_Updatedata(0x0002,g_height);
         #endif 
 
+    }
+    g_FailTime =  eeResult[7];
+    #ifdef USEDEBUG
+    printf("fail time = %d\r\n",g_FailTime);
+    #endif 
+    if(g_FailTime >60) 
+    {
+        g_WithoutOnenet = 1;
+      
     }
 }
 

@@ -114,14 +114,14 @@ void netdev_init(void)
         SendCmd("AT+NRB\r\n", "OK", 5000,0,10); 
         SendCmd("AT+CIMI\r\n", "OK", 2000,3,5);
         // SendCmd("AT+CGMR\r\n", "OK", 5000,0,10);
-        SendCmd("AT+CMVER\r\n", "OK", 5000,0xFFFF,10);//检测M5310的固件版本是否为sp3以上
+        SendCmd("AT+CMVER\r\n", "OK", 5000,5,10);//检测M5310的固件版本是否为sp3以上
         SendCmd("AT+CMEE=1\r\n","OK", 2000,0,10);
         SendCmd("AT+CSCON=1\r\n","OK", 2000,0,10);  
         SendCmd("AT+CEREG=2\r\n","OK", 2000,0,10); 
         SendCmd("AT+CEDRXS=0,5\r\n","OK", 3000,0,5); 
         SendCmd("AT+CPSMS=0\r\n","OK", 3000,0,5); 
         //   SendCmd("AT+CSCON?\r\n","CSCON:1,1", 5000); 
-        SendCmd("AT+CEREG?\r\n","CEREG:2,1", 3000,1000,5); 
+        SendCmd("AT+CEREG?\r\n","CEREG:2,1", 3000,5,5); 
         SendCmd("AT+csq\r\n", "OK", 2000,0,5); 
         SendCmd("AT+NUESTATS\r\n", "OK", 2000,0,5); 
         //   SendCmd("AT+CGDCONT?\r\n", "OK", 5000,0,10);
@@ -181,7 +181,7 @@ void output_buffer1(unsigned char *buffer, int length,int index, int flag)
 void mipl_generate(char *buf, size_t buflen, MIPL_T *mipl)
 {
 	strcpy(buf,"AT+MIPLCREATE=49,130031F10003F2002304001100000000000000123138332E3233302E34302E34303A35363833000131F30008C000000000,0,49,0\r\n"); //更改到适配的平台
-	SendCmd(buf,"+MIPLCREATE:0",300,0,300);
+	SendCmd(buf,"+MIPLCREATE:0",300,0,30);
 	
 	/*uint32_t offset = 0;
 	int mipl_num = 0;

@@ -7,7 +7,7 @@
 #define HC_TX_BUF_SIZE		30
 
 extern uint16_t g_lenth,g_width,g_height;
-extern uint8_t g_hcRevOK;
+extern uint8_t g_hcRevOK,g_FailTime;
 typedef struct
 {
 	uint8_t RxBuf[HC_RX_BUF_SIZE];

@@ -65,8 +65,8 @@ void HC_AskForData(void)
     04 --widthL
     05 --heightH
     06 --heightL
-    07 --failtimeH
-    08 --failtimeL
+    07 --failtime
+    
 */
  
 void HC_Analyze(void)

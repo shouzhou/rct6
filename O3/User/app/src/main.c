@@ -137,111 +137,131 @@ int main( int argc, char *argv[])
        int life_time = 500; //ORIGINAL 1000
 	   int ret;
        nbiot_init_environment( argc, argv );  
+  if(g_WithoutOnenet == 0)  //使用ONENET
+  {
+     #ifdef NOTIFY_ACK
+            ret = nbiot_device_create( &dev,
+                                       life_time,
+                                       write_callback,
+                                       read_callback,
+                                       execute_callback,
+                                       notify_ack_callback );
+    #else
+            ret = nbiot_device_create( &dev,
+                                       life_time,
+                                       write_callback,
+                                       read_callback,
+                                       execute_callback );
+    #endif
+           
+            if ( ret )
+            {
+                nbiot_device_destroy( dev );
+                printf( "device add resource(/3200/0/5750) failed, code = %d.\r\n", ret );
+            }
+            LED.type = NBIOT_BOOLEAN;
+            LED.flag = NBIOT_READABLE|NBIOT_WRITABLE;
+            ret = nbiot_resource_add( dev,
+                                      3311,
+                                      0,
+                                      5850,
+                                      &LED );//灯控制
+            if ( ret )
+            {
+                nbiot_device_destroy( dev );
+                printf( "device add resource(LED) failed, code = %d.\r\n", ret );
+            }
+                    
+            temp.type = NBIOT_FLOAT;
+            temp.flag = NBIOT_READABLE;
+            ret = nbiot_resource_add( dev,
+                                      3303,
+                                      0,
+                                      5700,
+                                      &temp );//温度
+            if ( ret )
+            {
+                nbiot_device_destroy( dev );
+                printf( "device add resource(temp) failed, code = %d.\r\n", ret );
+            }
+                    
+                    
+            humi.type = NBIOT_FLOAT;
+            humi.flag = NBIOT_READABLE;
+            ret = nbiot_resource_add( dev,
+                                      3304,
+                                      0,
+                                      5700,
+                                      &humi );//湿度
+            if ( ret )
+            {
+                nbiot_device_destroy( dev );
+                printf( "device add resource(humi) failed, code = %d.\r\n", ret );
+            }
 
- #ifdef NOTIFY_ACK
-        ret = nbiot_device_create( &dev,
-                                   life_time,
-                                   write_callback,
-                                   read_callback,
-                                   execute_callback,
-                                   notify_ack_callback );
-#else
-        ret = nbiot_device_create( &dev,
-                                   life_time,
-                                   write_callback,
-                                   read_callback,
-                                   execute_callback );
-#endif
-       
-        if ( ret )
-        {
-            nbiot_device_destroy( dev );
-            printf( "device add resource(/3200/0/5750) failed, code = %d.\r\n", ret );
-        }
-		LED.type = NBIOT_BOOLEAN;
-        LED.flag = NBIOT_READABLE|NBIOT_WRITABLE;
-        ret = nbiot_resource_add( dev,
-                                  3311,
-                                  0,
-                                  5850,
-                                  &LED );//灯控制
-        if ( ret )
-        {
-            nbiot_device_destroy( dev );
-            printf( "device add resource(LED) failed, code = %d.\r\n", ret );
-        }
-				
-        temp.type = NBIOT_FLOAT;
-        temp.flag = NBIOT_READABLE;
-        ret = nbiot_resource_add( dev,
-                                  3303,
-                                  0,
-                                  5700,
-                                  &temp );//温度
-        if ( ret )
-        {
-            nbiot_device_destroy( dev );
-            printf( "device add resource(temp) failed, code = %d.\r\n", ret );
-        }
-				
-				
-        humi.type = NBIOT_FLOAT;
-        humi.flag = NBIOT_READABLE;
-        ret = nbiot_resource_add( dev,
-                                  3304,
-                                  0,
-                                  5700,
-                                  &humi );//湿度
-        if ( ret )
-        {
-            nbiot_device_destroy( dev );
-            printf( "device add resource(humi) failed, code = %d.\r\n", ret );
-        }
+            illumi.type = NBIOT_FLOAT;
+            illumi.flag = NBIOT_READABLE;
+            ret = nbiot_resource_add( dev,
+                                      3301,
+                                      0,
+                                      5700,
+                                      &illumi );//光照
+            if ( ret )
+            {
+                nbiot_device_destroy( dev );
+                printf( "device add resource(illumi) failed, code = %d.\r\n", ret );
+            }
 
-        illumi.type = NBIOT_FLOAT;
-        illumi.flag = NBIOT_READABLE;
-        ret = nbiot_resource_add( dev,
-                                  3301,
-                                  0,
-                                  5700,
-                                  &illumi );//光照
-        if ( ret )
-        {
-            nbiot_device_destroy( dev );
-            printf( "device add resource(illumi) failed, code = %d.\r\n", ret );
-        }
+            nbiot_object_add(dev);
+            ret = nbiot_device_connect(dev,100);
 
-	    nbiot_object_add(dev);
-        ret = nbiot_device_connect(dev,100);
-
-        if ( ret )
-        {
-            printf( "device CONNECT error, code = %d.\r\n", ret );
-            printf( "connect OneNET failed.\r\n" );
-			      nbiot_reset();
-        }else{
-	        printf( "connect OneNET success.\r\n" );
-            IWDG_Init(5,1250); //4S 看门狗
-			  }
-         
+            if ( ret )
+            {
+                printf( "device CONNECT error, code = %d.\r\n", ret );
+                printf( "connect OneNET failed.\r\n" );
+                g_FailTime= g_FailTime +5;
+                eeResult[7] = g_FailTime;
+                ee_WriteBytes(0,&eeResult[7],0x07,0x01); //写失败次数
+                      nbiot_reset();
+            }else{
+                printf( "connect OneNET success.\r\n" );
+                g_FailTime= 0;
+                eeResult[7] = g_FailTime;
+                ee_WriteBytes(0,&eeResult[7],0x07,0x01); //重置失败次数
+                IWDG_Init(5,1250); //4S 看门狗
+                  }
+     }
     while(1)
     {
              IWDG_Feed();
-             ret = nbiot_device_step( dev, 1);
-             if ( ret )
-             {
-               printf( "device STEP error, code = %d.\r\n", ret );
-				      // Led4_Set(LED_OFF);
-               printf( "connect server failed.\r\n" );
-					 nbiot_reset();
-             }else{ 
-                    res_update(180);	
-             }	
+            if(g_WithoutOnenet == 0)
+            {
+                 ret = nbiot_device_step( dev, 1);
+                 if ( ret )  //fail
+                 {
+                   printf( "device STEP error, code = %d.\r\n", ret );
+                   g_FailTime= g_FailTime +1;
+                   eeResult[7] = g_FailTime;
+                   ee_WriteBytes(0,&eeResult[7],0x07,0x01); //写失败次数
+                          // Led4_Set(LED_OFF);
+                   printf( "connect server failed.\r\n" );
+                         nbiot_reset();
+                 }else{ 
+                        res_update(180);
+                       if(g_FailTime>0)
+                       {
+                        g_FailTime= 0;
+                        eeResult[7] = g_FailTime;
+                        ee_WriteBytes(0,&eeResult[7],0x07,0x01); //重置失败次数
+                       }                       
+                 }	
+             
+           }
              HC_Analyze();
              RTC_ReadClock();	/* 读时钟，结果存放在全局变量 g_tRTC */
 		
 		   /* 打印时钟 */
-             if(g_tRTC.Sec %10 ==0)
+            // if(g_tRTC.Sec %10 ==0)
 		   printf("%4d-%02d-%02d %02d:%02d:%02d\r\n", g_tRTC.Year, g_tRTC.Mon, g_tRTC.Day, 
 			  g_tRTC.Hour, g_tRTC.Min, g_tRTC.Sec);
 

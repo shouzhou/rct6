@@ -76,8 +76,9 @@ void nbiot_init_environment( int argc, char *argv[] )
 
         Peripheral_Init(); 
 
-        bsp_DelayMS(1000);			
-        netdev_init();
+        bsp_DelayMS(1000);
+        if(g_WithoutOnenet == 0)   //使用onnet 的情况下 才进行初始化     
+            netdev_init();
         _nbiot_init_state = true;
     }
 }

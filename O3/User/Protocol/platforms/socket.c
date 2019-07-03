@@ -89,11 +89,11 @@ int nbiot_udp_recv( void              *buff,
         return NBIOT_ERR_BADPARAM;
     }
 
-           netif_rx(buff,(uint16_t *)read);
-            if(*read!=0){ 
-							printf("recv:%s\r\n",buff);
-            }
-	   
+       netif_rx(buff,(uint16_t *)read);
+        if(*read!=0){ 
+                        printf("recv:%s\r\n",buff);
+        }
+   
     
     return NBIOT_ERR_OK;
 }
