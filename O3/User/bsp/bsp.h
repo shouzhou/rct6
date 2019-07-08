@@ -31,7 +31,7 @@
 //#define BSP_Printf(...)
 
 
-#define  USEDEBUG
+//#define  USEDEBUG
 
 #include "stm32f10x.h"
 #include <stdio.h>
@@ -68,6 +68,7 @@
 #include "bsp_i2c_gpio.h"
 #include "bsp_eeprom_24xx.h"
 #include "bsp_cpu_rtc.h"
+#include "bsp_adc.h"
 //#include "demo_i2c_eeprom.h"
 #include "bsp_iocontrol.h"
 #include "bsp_iwdg.h"

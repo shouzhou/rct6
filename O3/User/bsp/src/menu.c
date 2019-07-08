@@ -99,6 +99,21 @@ void  bsp_KeyFunction(uint8_t key)
                 bsp_SendKey(0x01);
                 printf("keyD press\r\n");
                 break;
+            case  KEYPAD_1 :
+                bsp_IOOn(1);
+                bsp_IOOn(2);
+                bsp_IOOn(3);
+                bsp_IOOn(4);
+                bsp_IOOn(5);
+            
+                break;
+            case  KEYPAD_2 :
+                bsp_IOOff(1);
+                bsp_IOOff(2);
+                bsp_IOOff(3);
+                bsp_IOOff(4);
+                bsp_IOOff(5);
+                break;
             default :
                 break;
       }          

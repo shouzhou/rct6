@@ -95,10 +95,7 @@ time_t cur_time=0;
 
 void res_update(time_t interval)
 {
-     // if((cur_time%10 ==0))
-      {
-           tim_print_result(); 
-      }
+     
 	    
        if(cur_time>=last_time+interval){  //间隔时间到
             cur_time=0;
@@ -136,6 +133,7 @@ int main( int argc, char *argv[])
 {
        int life_time = 500; //ORIGINAL 1000
 	   int ret;
+       float  ADCConvertedValueLocal[4]={0.0};
        nbiot_init_environment( argc, argv );  
   if(g_WithoutOnenet == 0)  //使用ONENET
   {
@@ -233,8 +231,8 @@ int main( int argc, char *argv[])
      }
     while(1)
     {
-             IWDG_Feed();
-            if(g_WithoutOnenet == 0)
+            IWDG_Feed();
+            if(g_WithoutOnenet == 0)  // use  onenet platform
             {
                  ret = nbiot_device_step( dev, 1);
                  if ( ret )  //fail
@@ -246,8 +244,9 @@ int main( int argc, char *argv[])
                           // Led4_Set(LED_OFF);
                    printf( "connect server failed.\r\n" );
                          nbiot_reset();
-                 }else{ 
-                        res_update(180);
+                 }else
+                 { 
+                       res_update(180);
                        if(g_FailTime>0)
                        {
                         g_FailTime= 0;
@@ -257,15 +256,28 @@ int main( int argc, char *argv[])
                  }	
              
            }
-             HC_Analyze();
-             RTC_ReadClock();	/* 读时钟，结果存放在全局变量 g_tRTC */
-		
-		   /* 打印时钟 */
-            // if(g_tRTC.Sec %10 ==0)
-		   printf("%4d-%02d-%02d %02d:%02d:%02d\r\n", g_tRTC.Year, g_tRTC.Mon, g_tRTC.Day, 
-			  g_tRTC.Hour, g_tRTC.Min, g_tRTC.Sec);
-
-			      
+            else  //dont use onenet platform just show on the screen
+            {
+                
+            }
+            tim_print_result(); 
+            HC_Analyze();
+//            RTC_ReadClock();	/* 读时钟，结果存放在全局变量 g_tRTC */
+// 		    printf("%4d-%02d-%02d %02d:%02d:%02d\r\n", g_tRTC.Year, g_tRTC.Mon, g_tRTC.Day, 
+//			  g_tRTC.Hour, g_tRTC.Min, g_tRTC.Sec);
+           
+           
+           #ifdef USEDEBUG
+           ADCConvertedValueLocal[0]=(float)ADCConvertedValue[0]/4096*3.3;
+		   printf(" \r\n 通道10(PC0)信号转换电压： %5f V \r\n",ADCConvertedValueLocal[0]);
+           ADCConvertedValueLocal[1]=(float)ADCConvertedValue[1]/4096*3.3;
+		   printf(" \r\n 通道11(PC1)信号转换电压： %5f V \r\n",ADCConvertedValueLocal[1]);
+           ADCConvertedValueLocal[2]=(float)ADCConvertedValue[2]/4096*3.3;
+		   printf(" \r\n 通道12(PC2)信号转换电压： %5f V \r\n",ADCConvertedValueLocal[2]);
+           ADCConvertedValueLocal[3]=(float)ADCConvertedValue[3]/4096*3.3;
+		   printf(" \r\n 通道13(PC3)信号转换电压： %5f V \r\n",ADCConvertedValueLocal[3]);
+          #endif
+		       
     } 
     nbiot_clear_environment();
  

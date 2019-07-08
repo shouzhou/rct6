@@ -35,6 +35,11 @@ void Peripheral_Init(void)
     
     BASIC_TIM_Init();
    // bsp_InitHardTimer();
+    
+    ADC1_GPIO_Configuration();
+	ADC1_DMA_RCC_Configuration();
+	ADC1_DMA_Init();
+    
     #ifdef USEDEBUG
     printf("CurMenuIndex = %d\r\n",CurMenuIndex);
     #endif

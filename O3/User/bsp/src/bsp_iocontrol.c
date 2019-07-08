@@ -15,8 +15,8 @@
 #define GPIO_PORT_IO4   GPIOB
 #define GPIO_PIN_IO4	GPIO_Pin_3
 
-#define GPIO_PORT_IO5   GPIOC
-#define GPIO_PIN_IO5	GPIO_Pin_13
+#define GPIO_PORT_IO5   GPIOB
+#define GPIO_PIN_IO5	GPIO_Pin_4
 
 /*
 *********************************************************************************************************
