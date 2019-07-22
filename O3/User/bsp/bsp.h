@@ -31,7 +31,7 @@
 //#define BSP_Printf(...)
 
 
-//#define  USEDEBUG
+#define  USEDEBUG
 
 #include "stm32f10x.h"
 #include <stdio.h>

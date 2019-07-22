@@ -63,10 +63,15 @@ void nbiot_init_environment( int argc, char *argv[] )
         bsp_MkeyInit();        
         bsp_DelayMS(5000);
         bsp_InitI2C();
-        #ifdef USEDEBUG
-            if(ee_CheckOk()) printf("eeprom initial ok！\r\n");
-            else  printf("eeprom initial error!\r\n");
-        #endif
+        if(ee_CheckOk())
+            #ifdef USEDEBUG
+             printf("eeprom initial ok！\r\n");
+             
+            #endif
+        else 
+            #ifdef USEDEBUG
+            printf("eeprom initial error!\r\n");
+            #endif
         //----------------- exec once ---------------------
         
       //  ee_WriteBytes(1,eeResult,0,EE_SIZE); //先全部清除
