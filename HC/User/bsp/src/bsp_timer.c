@@ -156,14 +156,14 @@ void SysTick_ISR(void)
 	{
 		g_iRunTime = 0;
 	}
-    if(g_iRunTime>0x5265C00) //调试  每10天复位一次
-    {
-        //系统复位函数
-        g_iRunTime = 0 ;
-        __set_FAULTMASK(1);
-        NVIC_SystemReset();
+//    if(g_iRunTime>0x5265C00) //调试  每10天复位一次
+//    {
+//        //系统复位函数
+//        g_iRunTime = 0 ;
+//        __set_FAULTMASK(1);
+//        NVIC_SystemReset();
 
-    }
+//    }
 
 	bsp_RunPer1ms();		/* 每隔1ms调用一次此函数，此函数在 bsp.c */
 

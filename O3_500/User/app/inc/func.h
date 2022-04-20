@@ -1,0 +1,22 @@
+
+
+#ifndef __APP_FUNC_H
+#define __APP_FUNC_H
+
+#include "stdint.h"
+
+
+void FunSwitch(void);
+void FunFanOpen(void);
+void FunFanClose(void);
+void FunO3Control(uint8_t onnum,uint8_t index);
+void FunO3_On(void);
+void FunO3_Off(void);
+float FunO3CalParameter(void);
+
+void bsp_SysCheck(void);
+void FunTouch(void);
+
+#endif
+
+ 

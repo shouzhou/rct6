@@ -507,17 +507,17 @@ uint8_t bsp_Read485Address(void)//连接时 ON 在上面 ON表示闭合 接地 低电平
        temp|= 0x08;//00001000
     }
     
-    if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_1) == 0) //SEL0 -低电平 打到ON上 -表示次高位逻辑1
+    if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_1) == 0) //SEL1 -低电平 打到ON上 -表示次高位逻辑1
     {
        temp|= 0x04;//00001000
     }
     
-    if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_2) == 0) //SEL0 -低电平 打到ON上 -表示第三位逻辑1
+    if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_2) == 0) //SEL2 -低电平 打到ON上 -表示第三位逻辑1
     {
        temp|= 0x02;//00001000
     }
     
-    if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_3) == 0) //SEL0 -低电平 打到ON上 -表示最低位逻辑1
+    if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_3) == 0) //SEL3 -低电平 打到ON上 -表示最低位逻辑1
     {
        temp|= 0x01;//00001000
     }

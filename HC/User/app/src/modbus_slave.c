@@ -574,6 +574,12 @@ static void MODS_03H(void)
 		g_tModS.RspCode = RSP_ERR_VALUE;					/* 数据值域错误 */
 		goto err_ret;
 	}
+    
+    // 增加数据尚未处理完，就进来读取数据的情况   ，直接判定数据值域错误
+//    if()
+//    {
+//        
+//    }
 
 	reg = BEBufToUint16(&g_tModS.RxBuf[2]); 				/* 寄存器号 */
 	num = BEBufToUint16(&g_tModS.RxBuf[4]);					/* 寄存器个数 */

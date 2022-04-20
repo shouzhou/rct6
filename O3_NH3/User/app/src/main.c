@@ -98,7 +98,7 @@ time_t cur_time=0;
 void res_update(time_t interval)
 {
      
-	    
+	    uint8_t updown=0;
        if(cur_time>=last_time+interval){  //间隔时间到
             cur_time=0;
             last_time=0;				 
@@ -111,7 +111,24 @@ void res_update(time_t interval)
            
             ADCConvertedValueLocal[0]=(float)ADCConvertedValue[0]/4096*3.3;  //获取AD转换电压
             g_nh3den = (uint16_t) (ADCConvertedValueLocal[0] * 100.0/3.0) ; //获取氨气浓度值100ppm 
-   
+//           if(updown ==0)
+//           {
+//           g_nh3den++;
+//           if(g_nh3den>60) 
+//               {
+//                  //g_nh3den =0;
+//                   updown = 1;
+//               }
+//           }
+//           else if(updown ==1)
+//           {
+//               g_nh3den--;
+//           if(g_nh3den==0) 
+//               {
+//                   g_nh3den =60;
+//                   updown = 0;
+//               }
+//           }
            // g_nh3den = 25;
             bsp_Diwen_Updatedata(0x0004,g_DHT11.Temp);
             bsp_Diwen_Updatedata(0x0005,g_DHT11.Hum);
@@ -144,6 +161,7 @@ int main( int argc, char *argv[])
        uint8_t tempsec=0,tempmin=0;
        
        nbiot_init_environment( argc, argv );  
+    printf("test\r\n");
   if(g_WithoutOnenet == 0)  //使用ONENET
   {
      #ifdef NOTIFY_ACK
@@ -268,7 +286,7 @@ int main( int argc, char *argv[])
            }
             else  //dont use onenet platform just show on the screen
             {
-               res_update(5); 
+               res_update(1); 
               // bsp_DelayMS(500);
             }
             tim_print_result(); 
@@ -278,78 +296,11 @@ int main( int argc, char *argv[])
             
             if(tempsec != g_tRTC.Sec)
             {
-                 printf("%4d-%02d-%02d %02d:%02d:%02d\r\n", g_tRTC.Year, g_tRTC.Mon, g_tRTC.Day, 
-			  g_tRTC.Hour, g_tRTC.Min, g_tRTC.Sec);
+               printf("%4d-%02d-%02d %02d:%02d:%02d\r\n", g_tRTC.Year, g_tRTC.Mon, g_tRTC.Day, g_tRTC.Hour, g_tRTC.Min, g_tRTC.Sec);
                 tempsec= g_tRTC.Sec;
                 
                 
-//                if(tempmin != g_tRTC.Min) //氨气浓度模拟程序
-//                {
-//                    tempmin = g_tRTC.Min;
-//                    g_nh3den = g_nh3den -10;
-//                    if(g_nh3den <10) g_nh3den =55;
-//                }
-                
-               if((g_func == STARTMANUAL)||(g_func == STOPMANUAL)) //手工模式
-               {
-                   FuncManual(g_func);
-                   if(g_func == STARTMANUAL)
-                    g_mannualtimerun++;  //显示手工运行时间
-                   else 
-                    g_mannualtimerun=0;   //清除手工运行时间
-               }
-               if((g_func == STARTLOOP)||(g_func == STOPLOOP))
-               {
-                   FuncLoop(g_func);
-                   
-                   if(g_loopstatus == 1)  //开状态
-                   {
-                    g_loopruntimerun++;   //记录运行的时间
-                      if(  g_loopruntimerun >g_loopruntime /10 * 60) //运行时间达到设置时间
-                      {
-                          g_loopruntimerun =0;
-                          
-                          g_loopstatus =0;
-                      }
-                   }
-                   else 
-                   {
-                    g_loopstoptimerun++;   //记录停止的时间
-                    if(  g_loopstoptimerun >g_loopstoptime /10 * 60) //运行时间达到设置时间
-                      {
-                          g_loopstoptimerun =0;
-                          
-                          g_loopstatus =1;
-                      }   
-                       
-                   }
-               }
-                if((g_func == STARTAUTODEN)||(g_func == STOPAUTODEN))
-               {
-                    FuncAutoNH3(g_func);
-                   if(g_AutoNh3Status == 1)  //开状态
-                   {
-                    g_nh3runtimerun++;   //记录运行的时间
-                      if(  g_nh3runtimerun >60) //运行时间达到设置时间--修改这里 -这里是5分钟
-                      {
-                          g_nh3runtimerun =0;
-                          
-                          g_AutoNh3Status =0;
-                      }
-                   }
-                   else 
-                   {
-                    g_nh3stoptimerun++;   //记录停止的时间
-                    if(  g_nh3stoptimerun >60) //停止时间 5分钟 修改这里
-                      {
-                          g_nh3stoptimerun =0;
-                          
-                          g_AutoNh3Status =1;
-                      }   
-                       
-                   }
-                    
-               }
+               FunSwitch();
                
                
                

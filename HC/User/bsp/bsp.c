@@ -48,6 +48,9 @@ void bsp_Init(void)
 	bsp_InitTimer();	/* 初始化系统滴答定时器 (此函数会开中断) */
 	RS485_RX_EN();      //调试添加
 //	bsp_InitADC();		/* 初始化ADC */
+    
+    g_tVar.P01 = 5000 ;
+    g_tVar.P02 = 2500;
 }
 
 /*
@@ -66,7 +69,8 @@ void bsp_RunPer10ms(void)
     uc_count++;
     if(uc_count == 50)
     {
-        bsp_LedToggle(1); //0.5S闪烁一次 D4
+        if(g_hcDataOk)
+            bsp_LedToggle(1); //1S闪烁一次 D4
         uc_count =0;
     }
 }

@@ -1,0 +1,6 @@
+D4 led1  PA8   系统运行
+D5 led2  PA11  MODBUS通信
+D6 led3  PA12  HC 温湿度传感器通信
+
+com2 温湿度  19200  
+com3 485   9600 偶校验  

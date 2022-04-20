@@ -1,0 +1,7 @@
+---- run_flag Matches (6 in 2 files) ----
+Ladder.c (users):	static u8  puls,run_flag; 
+Ladder.c (users):    if(run_flag == 1)
+Ladder.c (users):	     run_flag = 0;
+Ladder.c (users):	  if(run_flag == 0)
+Ladder.c (users):        run_flag = 1;
+Main.c (users):u8 run_flag;
